@@ -92,6 +92,7 @@ enum AwsSdkRequest {
   BedrockListDataSourcesRequest(BEDROCKKNOWLEDGEBASEOPERATION, "ListDataSourcesRequest"),
   BedrockUpdateAgentKnowledgeBaseRequest(
       BEDROCKKNOWLEDGEBASEOPERATION, "UpdateAgentKnowledgeBaseRequest"),
+  GetAgentMemoryRequest(BEDROCKAGENTRUNTIMEOPERATION, "GetAgentMemoryRequest"),
 
   SfnRequest(STEPFUNCTION, "SfnRequest"),
 
