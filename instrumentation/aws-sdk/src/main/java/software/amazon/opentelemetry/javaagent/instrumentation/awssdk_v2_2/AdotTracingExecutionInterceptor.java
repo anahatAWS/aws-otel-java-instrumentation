@@ -63,7 +63,7 @@ public class AdotTracingExecutionInterceptor implements ExecutionInterceptor {
   // after all upstream interceptors have processed it.
   @Override
   public SdkResponse modifyResponse(
-          Context.ModifyResponse context, ExecutionAttributes executionAttributes) {
+      Context.ModifyResponse context, ExecutionAttributes executionAttributes) {
     Span currentSpan = Span.current();
     AwsSdkRequest sdkRequest = executionAttributes.getAttribute(AWS_SDK_REQUEST_ATTRIBUTE);
 
