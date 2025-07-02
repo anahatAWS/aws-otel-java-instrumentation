@@ -46,6 +46,9 @@ public class AdotAwsSdkInstrumentationModule extends InstrumentationModule {
         "software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsBedrockResourceType",
         "software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsBedrockResourceType$AwsBedrockResourceTypeMap",
         "software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.BedrockJsonParser",
+        "software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.BedrockJsonParser$JsonParser",
+        "software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.BedrockJsonParser$LlmJson",
+        "software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.BedrockJsonParser$JsonPathResolver",
         "software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.RequestAccess",
         "software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.RequestAccess$1");
   }
