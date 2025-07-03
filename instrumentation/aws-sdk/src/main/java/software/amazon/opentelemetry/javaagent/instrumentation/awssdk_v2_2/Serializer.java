@@ -28,9 +28,6 @@ import software.amazon.awssdk.protocols.core.ProtocolMarshaller;
 import software.amazon.awssdk.utils.IoUtils;
 import software.amazon.awssdk.utils.StringUtils;
 
-/*
- * This class contains both patching logic and code copied from OTel aws-sdk-2.2.
- */
 class Serializer {
 
   @Nullable

@@ -37,10 +37,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import software.amazon.awssdk.core.SdkRequest;
 
-/*
- * This class contains both patching logic and code copied from OTel aws-sdk-2.2.
- * Requests from OTel aws-sdk-2.2 were removed to avoid duplicate work.
- */
 @SuppressWarnings("MemberName")
 enum AwsSdkRequest {
   // generic requests

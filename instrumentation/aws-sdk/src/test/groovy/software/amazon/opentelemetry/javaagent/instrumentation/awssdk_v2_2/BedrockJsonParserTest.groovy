@@ -7,9 +7,6 @@ package software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v2_2
 
 import spock.lang.Specification
 
-/*
- * This is a new class created during ADOT git patching.
- */
 class BedrockJsonParserTest extends Specification {
     def "should parse simple JSON object"() {
         given:

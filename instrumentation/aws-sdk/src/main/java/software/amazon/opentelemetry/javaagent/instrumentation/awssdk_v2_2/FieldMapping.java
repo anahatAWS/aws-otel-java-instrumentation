@@ -22,9 +22,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-/*
- * This class is fully copied from OTel's aws-sdk-2.2.
- */
 class FieldMapping {
 
   enum Type {

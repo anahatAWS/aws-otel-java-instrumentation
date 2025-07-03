@@ -47,9 +47,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-/*
- * This class contains both patching logic and code copied from OTel aws-sdk-2.2.
- */
 enum AwsSdkRequestType {
   S3(request(AWS_BUCKET_NAME.getKey(), "Bucket")),
 

@@ -20,9 +20,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
-/*
- * This class is fully copied from OTel's aws-sdk-2.2.
- */
 class MethodHandleFactory {
 
   private static String unCapitalize(String string) {
