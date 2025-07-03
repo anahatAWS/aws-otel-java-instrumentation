@@ -15,6 +15,13 @@
 
 package software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v2_2;
 
+/*
+ * Copyright The OpenTelemetry Authors
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Source: https://github.com/open-telemetry/opentelemetry-java-instrumentation
+ */
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

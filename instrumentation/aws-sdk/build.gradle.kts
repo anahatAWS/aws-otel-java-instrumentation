@@ -23,32 +23,16 @@ base.archivesBaseName = "aws-instrumentation-awssdk"
 
 dependencies {
 
-  compileOnly("software.amazon.awssdk:json-utils:2.17.0")
   compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
   // OpenTelemetry dependencies
   compileOnly("io.opentelemetry.javaagent:opentelemetry-javaagent-extension-api")
-  compileOnly("io.opentelemetry.instrumentation:opentelemetry-instrumentation-api")
 
   // AWS SDK dependencies for version 2.2.0
   compileOnly("software.amazon.awssdk:aws-core:2.2.0")
-  compileOnly("software.amazon.awssdk:lambda:2.2.0")
-  compileOnly("software.amazon.awssdk:aws-json-protocol:2.2.0")
-  compileOnly("software.amazon.awssdk:sfn:2.2.0")
   compileOnly("software.amazon.awssdk:secretsmanager:2.2.0")
 
   // Test dependencies
-  testImplementation(project(":instrumentation:aws-sdk:testing"))
-  testImplementation("io.opentelemetry.javaagent:opentelemetry-javaagent-extension-api")
-
-  // AWS SDK test dependencies for version 2.2.0
-  testImplementation("software.amazon.awssdk:dynamodb:2.2.0")
-  testImplementation("software.amazon.awssdk:ec2:2.2.0")
-  testImplementation("software.amazon.awssdk:kinesis:2.2.0")
-  testImplementation("software.amazon.awssdk:rds:2.2.0")
-  testImplementation("software.amazon.awssdk:s3:2.2.0")
-  testImplementation("software.amazon.awssdk:ses:2.2.0")
-  testImplementation("software.amazon.awssdk:sfn:2.2.0")
-  testImplementation("software.amazon.awssdk:secretsmanager:2.2.0")
-  testImplementation("software.amazon.awssdk:lambda:2.2.0")
+  testImplementation("com.google.guava:guava")
+  testImplementation("io.opentelemetry.javaagent:opentelemetry-testing-common")
 }
