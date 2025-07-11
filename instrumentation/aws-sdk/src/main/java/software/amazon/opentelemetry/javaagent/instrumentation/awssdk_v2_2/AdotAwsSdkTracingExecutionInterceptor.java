@@ -15,13 +15,18 @@
 
 package software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v2_2;
 
+import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v2_2.AwsExperimentalAttributes.AWS_AUTH_ACCESS_KEY;
+import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v2_2.AwsExperimentalAttributes.AWS_AUTH_REGION;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v2_2.AwsExperimentalAttributes.GEN_AI_SYSTEM;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v2_2.AwsSdkRequestType.BEDROCKRUNTIME;
 
 import io.opentelemetry.api.trace.Span;
+import software.amazon.awssdk.auth.credentials.AwsCredentials;
+import software.amazon.awssdk.auth.signer.AwsSignerExecutionAttribute;
 import software.amazon.awssdk.core.SdkRequest;
 import software.amazon.awssdk.core.SdkResponse;
 import software.amazon.awssdk.core.interceptor.*;
+import software.amazon.awssdk.regions.Region;
 
 public class AdotAwsSdkTracingExecutionInterceptor implements ExecutionInterceptor {
 
@@ -29,6 +34,9 @@ public class AdotAwsSdkTracingExecutionInterceptor implements ExecutionIntercept
   private static final ExecutionAttribute<AwsSdkRequest> AWS_SDK_REQUEST_ATTRIBUTE =
       new ExecutionAttribute<>(
           AdotAwsSdkTracingExecutionInterceptor.class.getName() + ".AwsSdkRequest");
+
+  private static final boolean CAPTURE_EXPERIMENTAL_ATTRIBUTES =
+      Boolean.getBoolean("otel.instrumentation.aws-sdk.experimental-span-attributes");
 
   private final FieldMapper fieldMapper = new FieldMapper();
 
@@ -40,6 +48,25 @@ public class AdotAwsSdkTracingExecutionInterceptor implements ExecutionIntercept
 
     SdkRequest request = context.request();
     Span currentSpan = Span.current();
+
+    if (CAPTURE_EXPERIMENTAL_ATTRIBUTES) {
+      AwsCredentials credentials =
+          executionAttributes.getAttribute(AwsSignerExecutionAttribute.AWS_CREDENTIALS);
+      Region signingRegion =
+          executionAttributes.getAttribute(AwsSignerExecutionAttribute.SIGNING_REGION);
+
+      if (credentials != null) {
+        String accessKeyId = credentials.accessKeyId();
+        if (accessKeyId != null) {
+          currentSpan.setAttribute(AWS_AUTH_ACCESS_KEY, accessKeyId);
+        }
+      }
+
+      if (signingRegion != null) {
+        String region = signingRegion.toString();
+        currentSpan.setAttribute(AWS_AUTH_REGION, region);
+      }
+    }
 
     try {
       // Skip injection if Otel span is invalid

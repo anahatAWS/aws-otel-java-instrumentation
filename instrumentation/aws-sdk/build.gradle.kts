@@ -31,4 +31,30 @@ dependencies {
 
   testImplementation("com.google.guava:guava")
   testImplementation("io.opentelemetry.javaagent:opentelemetry-testing-common")
+  testImplementation("io.opentelemetry:opentelemetry-sdk-testing")
+  testImplementation("io.opentelemetry:opentelemetry-sdk")
+  testImplementation("org.mockito:mockito-inline")
+  testImplementation("software.amazon.awssdk:s3:2.2.0")
+  testImplementation("software.amazon.awssdk:sqs:2.2.0")
+  testImplementation("software.amazon.awssdk:dynamodb:2.2.0")
+  testImplementation("software.amazon.awssdk:sns:2.2.0")
+  testImplementation("software.amazon.awssdk:secretsmanager:2.2.0")
+  testImplementation("software.amazon.awssdk:sfn:2.2.0")
+  testImplementation("software.amazon.awssdk:lambda:2.2.0")
+  testImplementation("software.amazon.awssdk:bedrockruntime:2.2.0")
+
+  testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+  testImplementation("org.assertj:assertj-core:3.24.2")
+}
+
+tasks.test {
+  useJUnitPlatform()
+  jvmArgs("-javaagent:${project.rootDir}/otelagent/build/libs/aws-opentelemetry-agent-0.1.0-SNAPSHOT.jar")
+  systemProperty("otel.javaagent.debug", "true")
+}
+
+tasks.register("AwsSdkV2TestClasspath") {
+  doLast {
+    println(configurations.testRuntimeClasspath.get().asPath)
+  }
 }
