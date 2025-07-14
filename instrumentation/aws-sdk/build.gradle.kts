@@ -45,12 +45,7 @@ dependencies {
 
   testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
   testImplementation("org.assertj:assertj-core:3.24.2")
-}
-
-tasks.test {
-  useJUnitPlatform()
-  jvmArgs("-javaagent:${project.rootDir}/otelagent/build/libs/aws-opentelemetry-agent-0.1.0-SNAPSHOT.jar")
-  systemProperty("otel.javaagent.debug", "true")
+  testImplementation("org.mockito:mockito-core:5.14.2")
 }
 
 tasks.register("AwsSdkV2TestClasspath") {
