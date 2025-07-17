@@ -16,17 +16,21 @@
 package software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11;
 
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_AGENT_ID;
+import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_AUTH_ACCESS_KEY;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_BEDROCK_RUNTIME_MODEL_ID;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_BEDROCK_SYSTEM;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_GUARDRAIL_ARN;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_GUARDRAIL_ID;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_KNOWLEDGE_BASE_ID;
+import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_LAMBDA_ARN;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_LAMBDA_NAME;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_LAMBDA_RESOURCE_ID;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_SECRET_ARN;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_SNS_TOPIC_ARN;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_STATE_MACHINE_ARN;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_STEP_FUNCTIONS_ACTIVITY_ARN;
+import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_STREAM_ARN;
+import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.AWS_TABLE_ARN;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.GEN_AI_REQUEST_MAX_TOKENS;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.GEN_AI_REQUEST_TEMPERATURE;
 import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_11.AwsExperimentalAttributes.GEN_AI_REQUEST_TOP_P;
@@ -36,6 +40,8 @@ import static software.amazon.opentelemetry.javaagent.instrumentation.awssdk_v1_
 
 import com.amazonaws.Request;
 import com.amazonaws.Response;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.handlers.HandlerContextKey;
 import io.opentelemetry.api.common.AttributeKey;
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.context.Context;
@@ -53,6 +59,8 @@ class AwsSdkExperimentalAttributesExtractor
   private static final String BEDROCK_AGENT_SERVICE = "AWSBedrockAgent";
   private static final String BEDROCK_AGENT_RUNTIME_SERVICE = "AWSBedrockAgentRuntime";
   private static final String BEDROCK_RUNTIME_SERVICE = "AmazonBedrockRuntime";
+  private static final HandlerContextKey<AWSCredentials> AWS_CREDENTIALS =
+      new HandlerContextKey<AWSCredentials>("AWSCredentials");
 
   AwsSdkExperimentalAttributesExtractor() {}
 
@@ -62,6 +70,15 @@ class AwsSdkExperimentalAttributesExtractor
     Object originalRequest = request.getOriginalRequest();
     String requestClassName = originalRequest.getClass().getSimpleName();
 
+    AWSCredentials credentials = request.getHandlerContext(AWS_CREDENTIALS);
+    if (credentials != null) {
+      String accessKeyId = credentials.getAWSAccessKeyId();
+      if (accessKeyId != null) {
+        attributes.put(AWS_AUTH_ACCESS_KEY, accessKeyId);
+      }
+    }
+
+    setAttribute(attributes, AWS_STREAM_ARN, originalRequest, RequestAccess::getStreamArn);
     setAttribute(
         attributes, AWS_STATE_MACHINE_ARN, originalRequest, RequestAccess::getStateMachineArn);
     setAttribute(
@@ -91,6 +108,8 @@ class AwsSdkExperimentalAttributesExtractor
       @Nullable Throwable error) {
     if (response != null) {
       Object awsResp = response.getAwsResponse();
+      setAttribute(attributes, AWS_TABLE_ARN, awsResp, RequestAccess::getTableArn);
+      setAttribute(attributes, AWS_LAMBDA_ARN, awsResp, RequestAccess::getLambdaArn);
       setAttribute(attributes, AWS_STATE_MACHINE_ARN, awsResp, RequestAccess::getStateMachineArn);
       setAttribute(
           attributes,
