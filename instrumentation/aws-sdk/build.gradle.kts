@@ -22,13 +22,19 @@ plugins {
 base.archivesBaseName = "aws-instrumentation-aws-sdk"
 
 dependencies {
+  compileOnly("com.google.code.findbugs:jsr305:3.0.2")
   compileOnly("io.opentelemetry.javaagent:opentelemetry-javaagent-extension-api")
+  compileOnly("io.opentelemetry.instrumentation:opentelemetry-instrumentation-api")
+  compileOnly("com.amazonaws:aws-java-sdk-core:1.11.0")
   compileOnly("software.amazon.awssdk:aws-core:2.2.0")
   compileOnly("software.amazon.awssdk:secretsmanager:2.2.0")
 
   compileOnly("net.bytebuddy:byte-buddy")
   compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.11.0")
+  testImplementation("io.opentelemetry.javaagent:opentelemetry-javaagent-extension-api")
+  testImplementation("org.mockito:mockito-core:5.14.2")
   testImplementation("com.google.guava:guava")
   testImplementation("io.opentelemetry.javaagent:opentelemetry-testing-common")
   testImplementation("io.opentelemetry:opentelemetry-sdk-testing")
@@ -42,6 +48,15 @@ dependencies {
   testImplementation("software.amazon.awssdk:sfn:2.2.0")
   testImplementation("software.amazon.awssdk:lambda:2.2.0")
   testImplementation("software.amazon.awssdk:bedrockruntime:2.2.0")
+
+  testImplementation("com.amazonaws:aws-java-sdk-core:1.11.0")
+  testImplementation("com.amazonaws:aws-java-sdk-lambda:1.11.0")
+  testImplementation("com.amazonaws:aws-java-sdk-kinesis:1.11.0")
+  testImplementation("com.amazonaws:aws-java-sdk-dynamodb:1.11.0")
+  testImplementation("com.amazonaws:aws-java-sdk-sns:1.11.0")
+  testImplementation("com.amazonaws:aws-java-sdk-stepfunctions:1.11.0")
+  testImplementation("com.amazonaws:aws-java-sdk-secretsmanager:1.11.0")
+  testImplementation("com.amazonaws:aws-java-sdk-bedrock:1.11.0")
 
   testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
   testImplementation("org.assertj:assertj-core:3.24.2")
