@@ -72,3 +72,5 @@ include("appsignals-tests:images:grpc:grpc-client")
 include("appsignals-tests:images:jdbc")
 include("appsignals-tests:images:kafka:kafka-producers")
 include("appsignals-tests:images:kafka:kafka-consumers")
+
+include("instrumentation:aws-lambda")
