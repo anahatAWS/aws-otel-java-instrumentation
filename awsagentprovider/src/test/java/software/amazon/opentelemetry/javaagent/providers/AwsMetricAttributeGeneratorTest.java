@@ -15,9 +15,24 @@
 
 package software.amazon.opentelemetry.javaagent.providers;
 
-import static io.opentelemetry.semconv.ResourceAttributes.SERVICE_NAME;
-import static io.opentelemetry.semconv.SemanticAttributes.*;
-import static io.opentelemetry.semconv.SemanticAttributes.MessagingOperationValues.PROCESS;
+import static io.opentelemetry.semconv.HttpAttributes.HTTP_REQUEST_METHOD;
+import static io.opentelemetry.semconv.HttpAttributes.HTTP_RESPONSE_STATUS_CODE;
+import static io.opentelemetry.semconv.NetworkAttributes.*;
+import static io.opentelemetry.semconv.ServerAttributes.SERVER_ADDRESS;
+import static io.opentelemetry.semconv.ServerAttributes.SERVER_PORT;
+import static io.opentelemetry.semconv.ServiceAttributes.SERVICE_NAME;
+import static io.opentelemetry.semconv.UrlAttributes.URL_FULL;
+import static io.opentelemetry.semconv.UrlAttributes.URL_PATH;
+import static io.opentelemetry.semconv.incubating.DbIncubatingAttributes.*;
+import static io.opentelemetry.semconv.incubating.FaasIncubatingAttributes.*;
+import static io.opentelemetry.semconv.incubating.GraphqlIncubatingAttributes.GRAPHQL_OPERATION_TYPE;
+import static io.opentelemetry.semconv.incubating.HttpIncubatingAttributes.*;
+import static io.opentelemetry.semconv.incubating.MessagingIncubatingAttributes.MESSAGING_OPERATION;
+import static io.opentelemetry.semconv.incubating.MessagingIncubatingAttributes.MESSAGING_SYSTEM;
+import static io.opentelemetry.semconv.incubating.MessagingIncubatingAttributes.MessagingOperationTypeIncubatingValues.PROCESS;
+import static io.opentelemetry.semconv.incubating.NetIncubatingAttributes.*;
+import static io.opentelemetry.semconv.incubating.PeerIncubatingAttributes.PEER_SERVICE;
+import static io.opentelemetry.semconv.incubating.RpcIncubatingAttributes.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -1237,28 +1252,28 @@ class AwsMetricAttributeGeneratorTest {
     // Validate behaviour of DB_NAME, SERVER_SOCKET_ADDRESS and SERVER_SOCKET_PORT exist, then
     // remove it.
     mockAttribute(DB_NAME, "db_name");
-    mockAttribute(SERVER_SOCKET_ADDRESS, "abc.com");
-    mockAttribute(SERVER_SOCKET_PORT, 3306L);
+    mockAttribute(NETWORK_LOCAL_ADDRESS, "abc.com");
+    mockAttribute(NETWORK_LOCAL_PORT, 3306L);
     validateRemoteResourceAttributes("DB::Connection", "db_name|abc.com|3306");
     mockAttribute(DB_NAME, null);
-    mockAttribute(SERVER_SOCKET_ADDRESS, null);
-    mockAttribute(SERVER_SOCKET_PORT, null);
+    mockAttribute(NETWORK_LOCAL_ADDRESS, null);
+    mockAttribute(NETWORK_LOCAL_PORT, null);
 
     // Validate behaviour of DB_NAME, SERVER_SOCKET_ADDRESS exist, then remove it.
     mockAttribute(DB_NAME, "db_name");
-    mockAttribute(SERVER_SOCKET_ADDRESS, "abc.com");
+    mockAttribute(NETWORK_LOCAL_ADDRESS, "abc.com");
     validateRemoteResourceAttributes("DB::Connection", "db_name|abc.com");
     mockAttribute(DB_NAME, null);
-    mockAttribute(SERVER_SOCKET_ADDRESS, null);
+    mockAttribute(NETWORK_LOCAL_ADDRESS, null);
 
     // Validate behaviour of SERVER_SOCKET_PORT exist, then remove it.
-    mockAttribute(SERVER_SOCKET_PORT, 3306L);
+    mockAttribute(NETWORK_LOCAL_PORT, 3306L);
     when(spanDataMock.getKind()).thenReturn(SpanKind.CLIENT);
     actualAttributes =
         GENERATOR.generateMetricAttributeMapFromSpan(spanDataMock, resource).get(DEPENDENCY_METRIC);
     assertThat(actualAttributes.get(AWS_REMOTE_RESOURCE_TYPE)).isNull();
     assertThat(actualAttributes.get(AWS_REMOTE_RESOURCE_IDENTIFIER)).isNull();
-    mockAttribute(SERVER_SOCKET_PORT, null);
+    mockAttribute(NETWORK_LOCAL_PORT, null);
 
     // Validate behaviour of only DB_NAME exist, then remove it.
     mockAttribute(DB_NAME, "db_name");

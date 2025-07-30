@@ -74,7 +74,7 @@ val dependencyLists = listOf(
   "com.sparkjava:spark-core:2.9.4",
   "com.squareup.okhttp3:okhttp:4.12.0",
   "io.opentelemetry.contrib:opentelemetry-aws-xray:1.48.0",
-  "io.opentelemetry.contrib:opentelemetry-aws-resources:1.39.0-alpha",
+  "io.opentelemetry.contrib:opentelemetry-aws-resources:1.48.0-alpha",
   "io.opentelemetry.proto:opentelemetry-proto:1.0.0-alpha",
   "io.opentelemetry.javaagent:opentelemetry-javaagent:$otelJavaAgentVersion",
   "io.opentelemetry:opentelemetry-extension-aws:1.20.1",
