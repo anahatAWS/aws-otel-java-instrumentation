@@ -26,12 +26,12 @@ base {
 
 dependencies {
   compileOnly("io.opentelemetry.javaagent:opentelemetry-javaagent-extension-api")
-  compileOnly("io.opentelemetry.semconv:opentelemetry-semconv")
+  compileOnly("io.opentelemetry.semconv:opentelemetry-semconv:1.28.0-alpha")
+  testImplementation("io.opentelemetry.semconv:opentelemetry-semconv:1.28.0-alpha")
   compileOnly("io.opentelemetry.semconv:opentelemetry-semconv-incubating")
-  testImplementation("io.opentelemetry.semconv:opentelemetry-semconv")
   testImplementation("io.opentelemetry.semconv:opentelemetry-semconv-incubating")
   compileOnly("com.google.errorprone:error_prone_annotations:2.19.1")
-  compileOnly("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi")
+  compileOnly("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:1.52.0")
   compileOnly("org.slf4j:slf4j-api")
 
   // Trace ID Generation and Sampling Rules
@@ -52,7 +52,7 @@ dependencies {
   implementation("software.amazon.awssdk:auth")
   implementation("software.amazon.awssdk:http-auth-aws")
 
-  testImplementation("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure")
+  testImplementation("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:1.52.0")
   testImplementation("io.opentelemetry:opentelemetry-sdk-testing")
   testImplementation("io.opentelemetry:opentelemetry-extension-aws")
   testImplementation("io.opentelemetry:opentelemetry-extension-trace-propagators")
