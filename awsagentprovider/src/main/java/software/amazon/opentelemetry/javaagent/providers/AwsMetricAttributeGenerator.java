@@ -100,6 +100,9 @@ import io.opentelemetry.sdk.trace.data.EventData;
 import io.opentelemetry.sdk.trace.data.ExceptionEventData;
 import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.semconv.*;
+import io.opentelemetry.semconv.incubating.DbIncubatingAttributes;
+import io.opentelemetry.semconv.incubating.GraphqlIncubatingAttributes;
+import io.opentelemetry.semconv.incubating.NetIncubatingAttributes;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -197,7 +200,7 @@ final class AwsMetricAttributeGenerator implements MetricAttributeGenerator {
     return builder.build();
   }
 
-  /** Service is always derived from {@link ResourceAttributes#SERVICE_NAME} */
+  /** Service is always derived from {@link ServiceAttributes#SERVICE_NAME} */
   private static void setService(Resource resource, SpanData span, AttributesBuilder builder) {
     AwsResourceAttributeConfigurator.setServiceAttribute(
         resource, builder, () -> logUnknownAttribute(AWS_LOCAL_SERVICE, span));
@@ -248,8 +251,8 @@ final class AwsMetricAttributeGenerator implements MetricAttributeGenerator {
    *   <li>DB
    *   <li>FAAS
    *   <li>Messaging
-   *   <li>GraphQL - Special case, if {@link SemanticAttributes#GRAPHQL_OPERATION_TYPE} is present,
-   *       we use it for RemoteOperation and set RemoteService to {@link #GRAPHQL}.
+   *   <li>GraphQL - Special case, if {@link GraphqlIncubatingAttributes#GRAPHQL_OPERATION_TYPE} is
+   *       present, we use it for RemoteOperation and set RemoteService to {@link #GRAPHQL}.
    * </ul>
    *
    * <p>In each case, these span attributes were selected from the OpenTelemetry trace semantic
@@ -765,18 +768,18 @@ final class AwsMetricAttributeGenerator implements MetricAttributeGenerator {
    *
    * <pre>
    * {address} attribute is retrieved in priority order:
-   * - {@link SemanticAttributes#SERVER_ADDRESS},
-   * - {@link SemanticAttributes#NET_PEER_NAME},
-   * - {@link SemanticAttributes#SERVER_SOCKET_ADDRESS}
-   * - {@link SemanticAttributes#DB_CONNECTION_STRING}-Hostname
+   * - {@link ServerAttributes#SERVER_ADDRESS},
+   * - {@link NetIncubatingAttributes#NET_PEER_NAME},
+   * - {@link NetworkAttributes#NETWORK_LOCAL_ADDRESS}
+   * - {@link DbIncubatingAttributes#DB_CONNECTION_STRING}-Hostname
    * </pre>
    *
    * <pre>
    * {port} attribute is retrieved in priority order:
-   * - {@link SemanticAttributes#SERVER_PORT},
-   * - {@link SemanticAttributes#NET_PEER_PORT},
-   * - {@link SemanticAttributes#SERVER_SOCKET_PORT}
-   * - {@link SemanticAttributes#DB_CONNECTION_STRING}-Port
+   * - {@link ServerAttributes#SERVER_PORT},
+   * - {@link NetIncubatingAttributes#NET_PEER_PORT},
+   * - {@link NetworkAttributes#NETWORK_LOCAL_PORT}
+   * - {@link DbIncubatingAttributes#DB_CONNECTION_STRING}-Port
    * </pre>
    *
    * If address is not present, neither RemoteResourceType nor RemoteResourceIdentifier will be
