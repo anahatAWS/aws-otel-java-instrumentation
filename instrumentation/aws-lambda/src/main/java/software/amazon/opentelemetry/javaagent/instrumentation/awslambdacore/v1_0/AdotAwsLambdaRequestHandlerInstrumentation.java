@@ -81,7 +81,9 @@ public class AdotAwsLambdaRequestHandlerInstrumentation implements TypeInstrumen
       }
 
       otelContext = parentContext;
-      otelContext.makeCurrent();
+      try (Scope ignored = otelContext.makeCurrent()){
+        // ignore
+      }
     }
   }
 }
