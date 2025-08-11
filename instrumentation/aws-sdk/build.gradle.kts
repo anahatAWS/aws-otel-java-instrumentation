@@ -30,6 +30,7 @@ dependencies {
   compileOnly("software.amazon.awssdk:aws-json-protocol:2.2.0")
   compileOnly("net.bytebuddy:byte-buddy")
 
+  testImplementation("org.junit.platform:junit-platform-launcher")
   testImplementation("com.google.guava:guava")
   testImplementation("org.mockito:mockito-core:5.14.2")
   testImplementation("io.opentelemetry.javaagent:opentelemetry-testing-common")
