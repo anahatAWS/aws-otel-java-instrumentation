@@ -45,6 +45,7 @@ public class AdotAwsLambdaInstrumentationModule extends InstrumentationModule {
 
   @Override
   public ElementMatcher.Junction<ClassLoader> classLoaderMatcher() {
+    // aws-lambda-events-2.2 is used when SQSEvent is present
     return not(hasClassesNamed("com.amazonaws.services.lambda.runtime.events.SQSEvent"));
   }
 

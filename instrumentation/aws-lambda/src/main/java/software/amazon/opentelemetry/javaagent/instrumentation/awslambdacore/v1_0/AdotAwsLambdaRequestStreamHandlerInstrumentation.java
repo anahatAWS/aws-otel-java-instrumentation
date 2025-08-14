@@ -82,9 +82,7 @@ public class AdotAwsLambdaRequestStreamHandlerInstrumentation implements TypeIns
       }
 
       otelContext = parentContext;
-      try (Scope ignored = otelContext.makeCurrent()) {
-        // ignore
-      }
+      otelScope = otelContext.makeCurrent();
     }
   }
 }
